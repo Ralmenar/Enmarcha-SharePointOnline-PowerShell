@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Site>
+  <SiteColumns>
+    <Add
+      Id="326865a1-762d-4c20-a5bb-e981abe14da1"
+      FieldType="TaxonomyFieldType"
+      Name="ENMARCHACategory"
+      DisplayName="Category"
+      StaticName="ENMARCHACategory"
+      Group="Enmarcha"
+      Hidden="False"
+      Required="False"
+      Sealed="False"
+      ShowInDisplayForm="True"
+      ShowInEditForm="True"
+      ShowInListSettings="True"
+      ShowInNewForm="True">
+      <DisplayNames>
+        <DisplayName Label="en-US" Value="Category" />
+      </DisplayNames>
+      <TaxonomyFieldType TermStoreGroupName="Enmarcha" TermSetName="Categories" AllowMultipleValues="False" FullPathRendered="False"/>
+    </Add>
+    <Add
+      Id="326865a1-762d-4c20-a5bb-e981abe14da1"
+      FieldType="Number"
+      Name="ENMARCHAOrder"
+      DisplayName="Order"
+      StaticName="ENMARCHAOrder"
+      Group="Enmarcha"
+      Hidden="False"
+      Required="True"
+      Sealed="False"
+      ShowInDisplayForm="True"
+      ShowInEditForm="True"
+      ShowInListSettings="True"
+      ShowInNewForm="True">
+      <DisplayNames>
+        <DisplayName Label="en-US" Value="Order" />
+      </DisplayNames>
+    </Add>
+	<Add
+      Id="326865a1-762d-4c20-a5bb-e981abe14da1"
+      FieldType="Boolean"
+      Name="ENMARCHAPriority"
+      DisplayName="Priority"
+      StaticName="ENMARCHAPriority"
+      Group="Enmarcha"
+      Hidden="False"
+      Required="False"
+      Sealed="False"
+      ShowInDisplayForm="True"
+      ShowInEditForm="True"
+      ShowInListSettings="True"
+      ShowInNewForm="True">      
+      <DisplayNames>
+        <DisplayName Label="en-US" Value="Priority" />
+      </DisplayNames>
+    </Add>
+    <Add
+      Id="399f5b2b-85b1-4005-add9-b8cb4c18bff0"
+      FieldType="Text"
+      Name="ENMARCHAItemName"
+      DisplayName="Item name"
+      StaticName="ENMARCHAItemName"
+      Group="Enmarcha"
+      Hidden="False"
+      Required="False"
+      Sealed="False"
+      ShowInDisplayForm="True"
+      ShowInEditForm="True"
+      ShowInListSettings="True"
+      ShowInNewForm="True">
+      <DisplayNames>
+        <DisplayName Label="en-US" Value="Item name" />
+      </DisplayNames>
+    </Add>
+	  <Add
+      Id="399f5b2b-85b1-4005-add9-b8cb4c18bff0"
+      FieldType="MultiChoice"
+      Name="ENMARCHAOptions"
+      DisplayName="Options"
+      StaticName="ENMARCHAOptions"
+      Group="Enmarcha"
+      Hidden="False"
+      Required="False"
+      Sealed="False"
+      ShowInDisplayForm="True"
+      ShowInEditForm="True"
+      ShowInListSettings="True"
+      ShowInNewForm="True">
+      <Choice>
+        <Choices>Option 1;#Option 2;#Option 3</Choices>
+      </Choice>	  
+      <DisplayNames>
+        <DisplayName Label="en-US" Value="Options" />
+      </DisplayNames>
+    </Add>
+  </SiteColumns>
+</Site>

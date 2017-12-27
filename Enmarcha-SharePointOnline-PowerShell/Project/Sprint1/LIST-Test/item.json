@@ -1,0 +1,70 @@
+{
+    "items": [
+        [
+            {
+                "Name": "Title",
+                "Value": "Item 1",
+                "Type": "text"
+            },
+            {
+                "Name": "ENMARCHACategory",
+                "Value": "Category 1",
+                "Type": "Taxonomy",
+                "Term": "Enmarcha;Categories"
+            },
+            {
+                "Name": "ENMARCHAOrder",
+                "Value": "1",
+                "Type": "Number"
+            },
+            {
+                "Name": "ENMARCHAPriority",
+                "Value": "1",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "ENMARCHAItemName",
+                "Value": "Name of the first item",
+                "Type": "Text"
+            },
+            {
+                "Name": "ENMARCHAOptions",
+                "Value": "Option 1;#Option 2",
+                "Type": "MultiChoice"
+            }
+        ],
+        [
+            {
+                "Name": "Title",
+                "Value": "Item 2",
+                "Type": "text"
+            },
+            {
+                "Name": "ENMARCHACategory",
+                "Value": "Category 2",
+                "Type": "Taxonomy",
+                "Term": "Enmarcha;Categories"
+            },
+            {
+                "Name": "ENMARCHAOrder",
+                "Value": "2",
+                "Type": "Number"
+            },
+            {
+                "Name": "ENMARCHAPriority",
+                "Value": "0",
+                "Type": "Boolean"
+            },
+            {
+                "Name": "ENMARCHAItemName",
+                "Value": "Name of the second item",
+                "Type": "Text"
+            },
+            {
+                "Name": "ENMARCHAOptions",
+                "Value": "Option 3",
+                "Type": "MultiChoice"
+            }
+        ]
+    ]
+}

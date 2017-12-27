@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<List>
+  <Url>/</Url>
+  <Name>Test List</Name>
+  <Description>Test List</Description>
+  <QuickLaunchOption>On</QuickLaunchOption>
+  <ContentTypes>
+    <ContentType LCID="1033" Name="Test Content Type" />
+  </ContentTypes>
+</List>
