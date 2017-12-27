@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Site>
+  <ContentTypes>
+    <Add
+       Id="0x0100B70886F11C0CDB418FB8A93F1C4842DD"
+       Parent="Item"
+       DisplayName="Test Content Type"
+       Name="Test Content Type"
+       StaticName="Test Content Type"
+       Group="Enmarcha"
+       Description="Test Content Type">
+      <DisplayNames>
+        <DisplayName Label="en-US" Value="Test Content Type" />
+      </DisplayNames>
+      <Fields>
+        <Add InternalName="ENMARCHACategory" />
+        <Add InternalName="ENMARCHAOrder" />
+        <Add InternalName="ENMARCHAPriority" />
+        <Add InternalName="ENMARCHAItemName" />
+        <Add InternalName="ENMARCHAOptions" />
+      </Fields>
+    </Add>
+  </ContentTypes>
+</Site>
