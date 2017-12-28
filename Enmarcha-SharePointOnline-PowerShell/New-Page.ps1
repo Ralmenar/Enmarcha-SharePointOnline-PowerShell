@@ -13,7 +13,7 @@ Process {
         [xml]$manifest = Get-Content "$strFileName"
 
         if ($manifest.Page.RemoveAtFirst -ne $null -and $manifest.Page.RemoveAtFirst.ToLower() -eq "true") {
-            Remove-PnPClientSidePage $manifest.Page.Name
+            Remove-PnPClientSidePage $manifest.Page.Name -Force
             Write-Host -ForegroundColor Green "Pagina '"$manifest.Page.Name"' borrada correctamente"
         }
 
