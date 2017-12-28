@@ -12,12 +12,17 @@ Process {
         $strFileName = $_.FullName
         [xml]$manifest = Get-Content "$strFileName"
 
+        if ($manifest.Page.RemoveAtFirst -ne $null -and $manifest.Page.RemoveAtFirst.ToLower() -eq "true") {
+            Remove-PnPClientSidePage $manifest.Page.Name
+            Write-Host -ForegroundColor Green "Pagina '"$manifest.Page.Name"' borrada correctamente"
+        }
+
         $commentsEnabled = $false
         if ($manifest.Page.CommentsEnabled -ne $null -and $manifest.Page.CommentsEnabled.ToLower() -eq "true") {
             $commentsEnabled = $true
         }
         Add-PnPClientSidePage -Name $manifest.Page.Name -CommentsEnabled $commentsEnabled
-        Write-Host -ForegroundColor Green "Pagina '"$manifest.Page.Name"' Creada Correctamente"
+        Write-Host -ForegroundColor Green "Pagina '"$manifest.Page.Name"' creada correctamente"
         
         $page = Get-PnPClientSidePage $manifest.Page.Name
 
