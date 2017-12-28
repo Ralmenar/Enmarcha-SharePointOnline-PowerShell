@@ -39,22 +39,7 @@ Process {
         Write-Host -ForegroundColor Green "Ok"	
         Set-PnPContext -Context $ctx # switch back to site A
     }	
-    if ($manifest.Site.Navigation -ne $null) {
-        Write-Host -ForegroundColor Yellow "Modificando la navegación"
-        $manifest.Site.Navigation.Add | % {
-            Remove-PnPNavigationNode -Title $_.Title -Location $_.Location -Force
-            if ($_.IsExternal -ne $null -and $_.IsExternal.ToLower() -eq "true") {
-                Add-PnPNavigationNode -Location $_.Location -Title $_.Title -External -Url ($UrlWebApplication+$_.Url)
-            } else {
-                Add-PnPNavigationNode -Location $_.Location -Title $_.Title -Url ($UrlWebApplication+$_.Url)
-            }
-        }
-        $manifest.Site.Navigation.Remove | % {
-            Remove-PnPNavigationNode -Title $_.Title -Location $_.Location -Force
-        }
-
-        Write-Host -ForegroundColor Green "Navegación actualizada"
-    }
+    
     if ($manifest.Site.Theme.Url -ne $null) {
 		
         $url = [string]::Concat($UrlWebApplication.Trim(), $manifest.Site.Theme.Url.Trim())
@@ -62,6 +47,7 @@ Process {
         Set-PnPTheme -ColorPaletteUrl $url -ResetSubwebsToInherit
         Write-Host -ForegroundColor Green "Ok"
     }	
+    
     if ($manifest.Site.IconUrl -ne $null) {			
         $urlIcon = $UrlWebApplication + $manifest.Site.IconUrl
         Write-Host  "Estableciendo el icono del sitio " $urlIcon

@@ -1,6 +1,3 @@
-#
-# CreateSite.ps1
-#
 Param
 (
     [Parameter(Mandatory=$true)]
@@ -46,6 +43,7 @@ Process
 			Get-ChildItem -Path $Path -Filter "PAGE-*" | % {
 				$list = & "$currentPath\New-Page.ps1" -Path $_.FullName -tenant $tenant -UrlWebApplication $UrlWebApplication 
 			}
+			$list = & "$currentPath\New-Navigation.ps1" -Path $Path -tenant $tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials
 			Get-ChildItem -Path $Path -Filter "WEB-*" | % {
                 $list = & "$currentPath\New-Web.ps1" -Path $_.FullName -tenant $Tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials 
 				Process-Folder -Path $_.FullName -tenant $Tenant -UrlWebApplication $UrlWebApplication -credentials $credentials
