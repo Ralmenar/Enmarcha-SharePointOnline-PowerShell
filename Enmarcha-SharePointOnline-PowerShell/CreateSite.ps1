@@ -4,7 +4,7 @@
 Param
 (
     [Parameter(Mandatory=$true)]
-    [string]$tenant = $(Read-Host -Prompt "Tenant"),  
+    [string]$Tenant = $(Read-Host -Prompt "Tenant"),  
     [Parameter(Mandatory=$true)]
     [string]$UrlWebApplication = $(Read-Host -Prompt "Url"),  
     [Parameter(Mandatory=$true)]  
@@ -21,7 +21,7 @@ Process
 		Param
         (
 			[Parameter(Mandatory=$true)]
-			[string]$tenant = $(Read-Host -Prompt "Tenant"),  
+			[string]$Tenant = $(Read-Host -Prompt "Tenant"),  
             [Parameter(Mandatory=$true)]
             [string]$Path,		
             [Parameter(Mandatory=$true)]
@@ -35,17 +35,17 @@ Process
 
             Write-Host -ForegroundColor Cyan "comenzando a procesar la carpeta $Path"					
 			Get-ChildItem -Path $Path -Filter "LIST-*" | % {
-                $list = & "$currentPath\New-List.ps1" -Path $_.FullName -tenant $tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials
+                $list = & "$currentPath\New-List.ps1" -Path $_.FullName -tenant $Tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials
             }
 			Get-ChildItem -Path $Path -Filter "DOCLIB-*" | % {
-                $list = & "$currentPath\New-DocLib.ps1" -Path $_.FullName -tenant $tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials
+                $list = & "$currentPath\New-DocLib.ps1" -Path $_.FullName -tenant $Tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials
             }
 			Get-ChildItem -Path $Path -Filter "LIB-*" | % {
-                $list = & "$currentPath\New-List.ps1" -Path $_.FullName -tenant $tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials 
+                $list = & "$currentPath\New-List.ps1" -Path $_.FullName -tenant $Tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials 
             }
 			Get-ChildItem -Path $Path -Filter "WEB-*" | % {
-                $list = & "$currentPath\New-Web.ps1" -Path $_.FullName -tenant $tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials 
-				Process-Folder -Path $_.FullName -tenant $tenant -UrlWebApplication $UrlWebApplication -credentials $credentials
+                $list = & "$currentPath\New-Web.ps1" -Path $_.FullName -tenant $Tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials 
+				Process-Folder -Path $_.FullName -tenant $Tenant -UrlWebApplication $UrlWebApplication -credentials $credentials
             }
 	    }
 	}
@@ -74,10 +74,10 @@ Process
 
     Set-PnPTraceLog -On -LogFile traceoutput.txt
 	Write-Host -ForegroundColor DarkBlue "Empezando el aprovionamiento"
-	$createWeb="$tenant$($UrlWebApplication)"
+	$createWeb="$Tenant$($UrlWebApplication)"
 	
-	Connect-PnPOnline -Url $tenant -Credentials $credential
-	$result= & "$currentPath\New-Site.ps1" -UrlWebApplication $UrlWebApplication -tenant $tenant -PathConfiguration "$PathConfiguration" -Path "$PathConfiguration"  -OwnerAlias $OwnerAlias -Credentials $credential
+	Connect-PnPOnline -Url $Tenant -Credentials $credential
+	$result= & "$currentPath\New-Site.ps1" -UrlWebApplication $UrlWebApplication -tenant $Tenant -PathConfiguration "$PathConfiguration" -Path "$PathConfiguration"  -OwnerAlias $OwnerAlias -Credentials $credential
 	
 	Connect-PnPOnline -Url $createWeb -Credentials $credential
 	$ctx = Get-PnPContext
@@ -102,16 +102,16 @@ Process
 	}
 
 	Write-Host "Iniciando la carpeta $PathConfiguration" -ForegroundColor Green			
-	Process-Folder -Path "$PathConfiguration" -UrlWebApplication $UrlWebApplication -tenant $tenant	-credentials $credential
+	Process-Folder -Path "$PathConfiguration" -UrlWebApplication $UrlWebApplication -tenant $Tenant	-credentials $credential
 	Write-Host "Finalizando la carpeta $PathConfiguration" -ForegroundColor Green
 	
 	#Lookup
 	Write-Host -ForegroundColor DarkBlue "Creando campos Lookup"
-	$item= & "$currentPath\AddLookup.ps1" -tenant $tenant -UrlWebApplication $UrlWebApplication -credentials $credential -path $PathConfiguration
+	$item= & "$currentPath\AddLookup.ps1" -tenant $Tenant -UrlWebApplication $UrlWebApplication -credentials $credential -path $PathConfiguration
 	Write-Host -ForegroundColor Green "Campos Lookup creados correctamente"	
 
 	Write-Host -ForegroundColor Magenta "Creando items"
-	$items = & "$currentPath\AddItems.ps1"  -tenant $tenant -UrlWebApplication $UrlWebApplication -credentials $credential -CurrentPath $currentPath -Path $PathConfiguration
+	$items = & "$currentPath\AddItems.ps1"  -tenant $Tenant -UrlWebApplication $UrlWebApplication -credentials $credential -CurrentPath $currentPath -Path $PathConfiguration
 	Write-Host -ForegroundColor DarkCyan "Items creados correctamente"
 
     Write-Host "Despliegue completado" -ForegroundColor Green	

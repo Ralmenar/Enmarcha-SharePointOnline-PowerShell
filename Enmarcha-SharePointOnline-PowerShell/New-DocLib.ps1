@@ -69,8 +69,7 @@ Process
 			if($manifest.List.Views -ne $null)
 			{
 				$manifest.List.Views.View | % {
-					$default=$false;		
-					$query=Convert-XmlElementToString($_.Query) 
+					$query=$_.Query 
 					$query=$query.Replace("<Query>","")
 					$query=$query.Replace("</Query>","")
 					$field=$_.Fields -split ","
@@ -83,15 +82,14 @@ Process
 					if ($_.Default -eq "true")
 					{
 						Write-Host "Add-PnPView -List" $manifest.List.Name "-Title " $_.Name "-Query " $query " -SetAsDefault  -Fields " $resultField "-Paged "
-						$view2= Add-PnPView -List $manifest.List.Name -Title $_.Name -Query $query -Fields $resultField  -Paged -SetAsDefault
+						Add-PnPView -List $manifest.List.Name -Title $_.Name -Query $query -Fields $resultField  -Paged -SetAsDefault
 						
 					}
 					else
 					{
+						Write-Host "Add-PnPView -List" $manifest.List.Name "-Title " $_.Name "-Query " $query " -Fields " $resultField "-Paged "
 						Add-PnPView -List $manifest.List.Name -Title $_.Name -Query $query  -Fields $_.Fields -Paged
 					}
-					
-
 				}
 			}
 			if($manifest.List.DefaultValues -ne $null)
