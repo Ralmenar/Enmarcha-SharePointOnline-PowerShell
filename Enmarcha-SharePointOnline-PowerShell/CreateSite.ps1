@@ -43,6 +43,9 @@ Process
 			Get-ChildItem -Path $Path -Filter "LIB-*" | % {
                 $list = & "$currentPath\New-List.ps1" -Path $_.FullName -tenant $Tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials 
             }
+			Get-ChildItem -Path $Path -Filter "PAGE-*" | % {
+				$list = & "$currentPath\New-Page.ps1" -Path $_.FullName -tenant $tenant -UrlWebApplication $UrlWebApplication 
+			}
 			Get-ChildItem -Path $Path -Filter "WEB-*" | % {
                 $list = & "$currentPath\New-Web.ps1" -Path $_.FullName -tenant $Tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials 
 				Process-Folder -Path $_.FullName -tenant $Tenant -UrlWebApplication $UrlWebApplication -credentials $credentials

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page Name="Home" CommentsEnabled="False">
+    <Webparts>
+        <Webpart Name="VideoEmbed" />
+        <Webpart Name="NewsReel" />
+        <Webpart Name="ContentRollup" />
+        <Webpart Name="YammerEmbed" />
+    </Webparts>
+</Page>
