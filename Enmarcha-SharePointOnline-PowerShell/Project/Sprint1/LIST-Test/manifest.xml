@@ -9,6 +9,12 @@
   </ContentTypes>
   <Versioning EnableVersioning="True" DraftVersionVisibility="Author" EnableModeration="True" MajorVersions="50"/>
   <Views>
-    <View Name="My View" Default="True" Fields="Title,Modified,Editor" Query="&lt;GroupBy Collapse=&quot;False&quot;&gt;&lt;FieldRef Name=&quot;ENMARCHACategory&quot; /&gt;&lt;/GroupBy&gt;" />
+    <View Name="My View" Default="True" Fields="Title,Modified,Editor">
+      <Query>
+        <GroupBy Collapse="False">
+          <FieldRef Name="ENMARCHACategory" />
+        </GroupBy>
+      </Query>
+    </View>
   </Views>
 </List>

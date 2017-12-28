@@ -141,7 +141,7 @@ Process {
                 }
                 catch {}
 
-                $query = $_.Query 
+                $query = Convert-XmlElementToString($_.Query) 
                 $query = $query.Replace("<Query>", "")
                 $query = $query.Replace("</Query>", "")
                 $field = $_.Fields -split ","
@@ -157,7 +157,7 @@ Process {
                 }
                 else {
                     Write-Host "Add-PnPView -List" $manifest.List.Name "-Title " $_.Name "-Query " $query " -Fields " $resultField "-Paged "
-                    Add-PnPView -List $manifest.List.Name -Title $_.Name -Query $query  -Fields $_.Fields -Paged
+                    Add-PnPView -List $manifest.List.Name -Title $_.Name -Query $query  -Fields $resultField -Paged
                 }
             }
         }
