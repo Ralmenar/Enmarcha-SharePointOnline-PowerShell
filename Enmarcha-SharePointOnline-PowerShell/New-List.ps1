@@ -26,7 +26,6 @@ Process {
         $existingList = Get-PnpList | Where-Object { $_.Title -eq $manifest.List.Name} 
         if ($existingList.Title -ne $null) {
             Write-Host -ForegroundColor Yellow  "La lista '" $manifest.List.Name"' ya existe"
-            #return
         }
         else {
             $list = New-PnPList -Title $manifest.List.Name -Template GenericList   -EnableContentTypes  -OnQuickLaunch 
@@ -34,11 +33,16 @@ Process {
         if ($manifest.List.ContentTypes -ne $null) {
             $manifest.List.ContentTypes.ContentType | % {
                 Write-Host -ForegroundColor Green "Agregando el Content Type "$_.Name" a la lista $Path"
-                Add-PnPContentTypeToList -List $manifest.List.Name  -ContentType $_.Name
+                if ($_.DefaultContentType -ne $null -and $_.DefaultContentType.ToLower() -eq "true") {
+                    Add-PnPContentTypeToList -List $manifest.List.Name -ContentType $_.Name -DefaultContentType
+                }
+                else {
+                    Add-PnPContentTypeToList -List $manifest.List.Name -ContentType $_.Name
+                }
             }
-			
+            Remove-PnPContentTypeFromList -List $manifest.List.Name -ContentType "Item"	
         }
-        Remove-PnPContentTypeFromList -List $manifest.List.Name -ContentType "Item"
+        
         if ($manifest.List.DocumentSets -ne $null) {
             $contador = 1;
             $manifest.List.DocumentSets.ContentTypes.ContentType | % {			   

@@ -28,8 +28,7 @@ Process {
 		
         $existingList = Get-PnpList | Where-Object { $_.Title -eq $manifest.List.Name} 
         if ($existingList.Title -ne $null) {
-            Write-Host -ForegroundColor Yellow  "La lista '"$manifest.List.Name"' ya existe"       
-            Remove-PnPContentTypeFromList -List $manifest.List.Name -ContentType "Document"
+            Write-Host -ForegroundColor Yellow  "La lista '"$manifest.List.Name"' ya existe"
         }
         else {
             New-PnPList -Title $manifest.List.Name -Template DocumentLibrary  -EnableContentTypes  -OnQuickLaunch 
@@ -37,7 +36,12 @@ Process {
         if ($manifest.List.ContentTypes -ne $null) {
             $manifest.List.ContentTypes.ContentType | % {
                 Write-Host -ForegroundColor Green "Agregando el Content Type "$_.Name" a la lista $Path"
-                Add-PnPContentTypeToList -List $manifest.List.Name  -ContentType $_.Name
+                if ($_.DefaultContentType -ne $null -and $_.DefaultContentType.ToLower() -eq "true") {
+                    Add-PnPContentTypeToList -List $manifest.List.Name -ContentType $_.Name -DefaultContentType
+                }
+                else {
+                    Add-PnPContentTypeToList -List $manifest.List.Name -ContentType $_.Name
+                }
             }
             Remove-PnPContentTypeFromList -List $manifest.List.Name -ContentType "Document"
         }
@@ -94,34 +98,38 @@ Process {
             $ctx2.Load($list)
 
             if ($manifest.List.Versioning.ForceCheckout -ne $null) {
-				if ($manifest.List.Versioning.ForceCheckout.ToLower() -eq "true") {
-					$list.ForceCheckout = $true
-				} else {
-					$list.ForceCheckout = $false
-				}
-			}
+                if ($manifest.List.Versioning.ForceCheckout.ToLower() -eq "true") {
+                    $list.ForceCheckout = $true
+                }
+                else {
+                    $list.ForceCheckout = $false
+                }
+            }
 			
-			if ($manifest.List.Versioning.DraftVersionVisibility -ne $null) {
-				if ($manifest.List.Versioning.DraftVersionVisibility.ToLower() -eq "reader") {
-					$list.DraftVersionVisibility = 0
-				} else {
-					if ($manifest.List.Versioning.DraftVersionVisibility.ToLower() -eq "approver") {
-						$list.DraftVersionVisibility = 2
-					} else {
-						$list.DraftVersionVisibility = 1
-					}
-				}
-			}
+            if ($manifest.List.Versioning.DraftVersionVisibility -ne $null) {
+                if ($manifest.List.Versioning.DraftVersionVisibility.ToLower() -eq "reader") {
+                    $list.DraftVersionVisibility = 0
+                }
+                else {
+                    if ($manifest.List.Versioning.DraftVersionVisibility.ToLower() -eq "approver") {
+                        $list.DraftVersionVisibility = 2
+                    }
+                    else {
+                        $list.DraftVersionVisibility = 1
+                    }
+                }
+            }
 			
-			if ($manifest.List.Versioning.EnableModeration -ne $null) {
-				if ($manifest.List.Versioning.EnableModeration.ToLower() -eq "true") {
-					$list.EnableModeration = $true
-				} else {
-					$list.EnableModeration = $false
-				}
-			}
+            if ($manifest.List.Versioning.EnableModeration -ne $null) {
+                if ($manifest.List.Versioning.EnableModeration.ToLower() -eq "true") {
+                    $list.EnableModeration = $true
+                }
+                else {
+                    $list.EnableModeration = $false
+                }
+            }
 
-			$list.Update()
+            $list.Update()
             $ctx2.ExecuteQuery()
             $ctx2.Dispose()
         }
