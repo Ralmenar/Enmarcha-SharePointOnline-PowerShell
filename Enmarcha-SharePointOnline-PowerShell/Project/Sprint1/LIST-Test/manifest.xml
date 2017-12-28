@@ -7,6 +7,7 @@
   <ContentTypes>
     <ContentType LCID="1033" Name="Test Content Type" />
   </ContentTypes>
+  <Versioning EnableVersioning="True" DraftVersionVisibility="Author" EnableModeration="True" MajorVersions="50"/>
   <Views>
     <View Name="My View" Default="True" Fields="Title,Modified,Editor" Query="&lt;GroupBy Collapse=&quot;False&quot;&gt;&lt;FieldRef Name=&quot;ENMARCHACategory&quot; /&gt;&lt;/GroupBy&gt;" />
   </Views>
