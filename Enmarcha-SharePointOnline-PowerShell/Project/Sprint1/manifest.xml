@@ -10,4 +10,7 @@
         <Add Title="News" Url="/_layouts/News.aspx" Location="QuickLaunch" IsExternal="False" />
         <Remove Title="Notebook" Location="QuickLaunch" />
     </Navigation>
+    <SiteFeatures>
+        <Add Id="f6924d36-2fa8-4f0b-b16d-06b7250180fa" />
+    </SiteFeatures>
 </Site>

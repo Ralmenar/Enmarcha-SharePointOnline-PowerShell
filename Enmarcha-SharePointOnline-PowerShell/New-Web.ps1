@@ -31,6 +31,23 @@ Process {
     $urlSource = $tenant + $UrlWebApplication + "/" + $manifest.Site.RelativeUrl	
 
     Connect-PnPOnline -Url $urlSource -Credentials $credentials
+
+    if ($manifest.Site.WebFeatures -ne $null) {
+        if ($manifest.Site.WebFeatures.Add -ne $null) {
+            $manifest.Site.WebFeatures.Add | % {
+                Write-Host -ForegroundColor Yellow "Activando característica "$_.Id
+                Enable-PnPFeature -Identity $_.Id -Scope Web -Force
+                Write-Host -ForegroundColor Green "Ok"
+            }
+        }
+        if ($manifest.Site.WebFeatures.Remove -ne $null) {
+            $manifest.Site.WebFeatures.Remove | % {
+                Write-Host -ForegroundColor Yellow "Desactivando característica "$_.Id
+                Disable-PnPFeature -Identity $_.Id -Scope Web -Force
+                Write-Host -ForegroundColor Green "Ok"
+            }
+        }
+    }
 	
     if ($manifest.Site.WelcomePage.Url -ne $null) {			
         Write-Host -ForegroundColor Yellow "Estableciendo pagina de inicio en el site" $manifest.Site.WelcomePage.Url 
