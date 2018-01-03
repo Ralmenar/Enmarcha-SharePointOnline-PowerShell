@@ -94,12 +94,12 @@ Process
 	###Creo las Columnas de Sitio
 	Get-ChildItem -Path $PathConfiguration -Filter "SiteColumns*"   | % {
 		Write-Host "Procesando el XML del fichero" + $_.FullName
-		Import-ContentTypesXmlFiles -Path $_.FullName -ContentTypeMinVersion $ContentTypeMinVersion -ContentTypeMaxVersion $ContentTypeMaxVersion 
+		Import-ContentTypesXmlFiles -Path $_.FullName -ContentTypeMinVersion $ContentTypeMinVersion -ContentTypeMaxVersion $ContentTypeMaxVersion -Credentials $credential
 	}
 	#Creo los Tipos de Contenidos
 	Get-ChildItem -Path $PathConfiguration -Filter "*ContentType*"   | % {
 		Write-Host "Procesando el XML del fichero" + $_.FullName
-		Import-ContentTypesXmlFiles -Path $_.FullName -ContentTypeMinVersion $ContentTypeMinVersion -ContentTypeMaxVersion $ContentTypeMaxVersion 
+		Import-ContentTypesXmlFiles -Path $_.FullName -ContentTypeMinVersion $ContentTypeMinVersion -ContentTypeMaxVersion $ContentTypeMaxVersion -Credentials $credential
 	}
 
 	Write-Host "Iniciando la carpeta $PathConfiguration" -ForegroundColor Green			

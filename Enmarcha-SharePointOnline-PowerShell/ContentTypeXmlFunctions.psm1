@@ -57,7 +57,10 @@ Function New-SiteColumnFromXml() {
     Param
     (
         [Parameter(Mandatory = $true)]
-        [System.Xml.XmlElement]$Xml
+        [System.Xml.XmlElement]$Xml,
+
+        [Parameter(Mandatory = $true)]
+        [System.Management.Automation.PSCredential]$Credentials
     )
     Process {
         Write-Host "Iniciando función New-SiteColumnFromXml en el sitio Xml: $($Xml.OuterXml)"
@@ -93,7 +96,7 @@ Function New-SiteColumnFromXml() {
             -IsOpen (Get-BoolValueOrNull $Xml.TaxonomyFieldType.IsOpen) `
             -AllowMultipleValues (Get-BoolValueOrNull $Xml.TaxonomyFieldType.AllowMultipleValues) `
             -TermStoreGroupName $Xml.TaxonomyFieldType.TermStoreGroupName -TermSetName $Xml.TaxonomyFieldType.TermSetName `
-            -CurrencyFormat $Xml.CurrencyFormat -DecimalFormat $Xml.DecimalFormat 
+            -CurrencyFormat $Xml.CurrencyFormat -DecimalFormat $Xml.DecimalFormat -Credentials $Credentials
     }
 }
 
@@ -153,7 +156,10 @@ Function Import-ContentTypesXmlFiles() {
         [string]$ContentTypeMinVersion = $null,
 
         [Parameter(Mandatory = $false)]
-        [string]$ContentTypeMaxVersion = $null
+        [string]$ContentTypeMaxVersion = $null,
+
+        [Parameter(Mandatory = $true)]
+        [System.Management.Automation.PSCredential]$Credentials
     )
     Process {
         [string]$prefix = "ContentTypes-"
@@ -162,7 +168,7 @@ Function Import-ContentTypesXmlFiles() {
 
             if ($ContentTypeMinVersion -eq $null -or $ContentTypeMinVersion -eq "" -or $version -ge $ContentTypeMinVersion) {
                 if ($ContentTypeMaxVersion -eq $null -or $ContentTypeMaxVersion -eq "" -or $version -le $ContentTypeMaxVersion) {
-                    Import-ContentTypeXmlFile -Path $_.FullName  
+                    Import-ContentTypeXmlFile -Path $_.FullName -Credentials $Credentials
                 }
             }
         }
@@ -173,7 +179,10 @@ Function New-SiteContentTypeFromXml() {
     Param
     (
         [Parameter(Mandatory = $true)]
-        [System.Xml.XmlElement]$Xml        
+        [System.Xml.XmlElement]$Xml,
+
+        [Parameter(Mandatory = $true)]
+        [System.Management.Automation.PSCredential]$Credentials
     )
     Process {
         Write-Host "Iniciando función New-SiteContentTypeFromXml en el sitio: Xml: $($Xml.OuterXml)"
@@ -190,7 +199,7 @@ Function New-SiteContentTypeFromXml() {
             -Group $Xml.Group `
             -DisplayFormUrl $Xml.DisplayFormUrl -EditFormUrl $Xml.EditFormUrl -NewFormUrl $Xml.NewFormUrl `
             -Hidden $hidden `
-            -Fields $Xml.Fields 
+            -Fields $Xml.Fields -Credentials $Credentials
     }
 }
 
@@ -198,19 +207,22 @@ Function Import-ContentTypeXmlFile() {
     Param
     (
         [Parameter(Mandatory = $true)]
-        [string]$Path		
+        [string]$Path,
+
+        [Parameter(Mandatory = $true)]
+        [System.Management.Automation.PSCredential]$Credentials	
     )
     Process {
         [xml]$manifest = Get-Content $Path -Encoding UTF8
         if ($manifest.Site.SiteColumns.Add -ne $null) {
             $manifest.Site.SiteColumns.Add | % {
-                New-SiteColumnFromXml -Xml $_   | Out-Null
+                New-SiteColumnFromXml -Xml $_ -Credentials $Credentials | Out-Null
             }
         }
         
         if ($manifest.Site.ContentTypes.Add -ne $null) {
             $manifest.Site.ContentTypes.Add | % {
-                New-SiteContentTypeFromXml -Xml $_  | Out-Null
+                New-SiteContentTypeFromXml -Xml $_ -Credentials $Credentials | Out-Null
             }
         }
     

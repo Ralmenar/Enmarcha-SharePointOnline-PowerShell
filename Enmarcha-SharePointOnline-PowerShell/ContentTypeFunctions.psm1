@@ -129,12 +129,38 @@ Function New-SiteColumn() {
         [string]$DecimalFormat,
 
         [Parameter(Mandatory = $false)]
-        [string]$Description
+        [string]$Description,
+
+        [Parameter(Mandatory = $true)]
+        [System.Management.Automation.PSCredential]$Credentials	
     )
     Process {
         $existingField = Get-PnpField | Where-Object { $_.InternalName -eq $InternalName} 		
         if ($existingField.Title -ne $null) {
             Write-Host -ForegroundColor Yellow  "El campo '$InternalName' ya existe"
+            if ($LocalizedDisplayNames -ne $null) {
+                $cxt = Get-PnPContext
+                $creden = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($Credentials.UserName, $Credentials.Password)
+                $context = New-Object Microsoft.SharePoint.Client.ClientContext($cxt.Url)
+                $context.Credentials = $creden
+                $web = $context.Web
+                $fields = $context.Web.Fields
+                $myfield = $fields.GetByInternalNameOrTitle($InternalName)
+                $context.Load($web)
+                $context.Load($fields)
+                $context.Load($myfield)
+                $context.ExecuteQuery()
+    
+                $LocalizedDisplayNames.GetEnumerator() | % {
+                    if ($web.Language -eq $_.Key.LCID)
+                    {
+                        $myfield.Title = $_.Value
+                    }
+                    $myfield.TitleResource.SetValueForUICulture($_.Key, $_.Value)
+                }
+                $myfield.UpdateAndPushChanges($true)
+                $context.ExecuteQuery()
+            }
             return
         }
 		
@@ -183,6 +209,31 @@ Function New-SiteColumn() {
                 }
             }
         }
+
+        if ($LocalizedDisplayNames -ne $null) {
+            $cxt = Get-PnPContext
+            $creden = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($Credentials.UserName, $Credentials.Password)
+            $context = New-Object Microsoft.SharePoint.Client.ClientContext($cxt.Url)
+            $context.Credentials = $creden
+            $web = $context.Web
+            $fields = $context.Web.Fields
+            $myfield = $fields.GetByInternalNameOrTitle($InternalName)
+            $context.Load($web)
+            $context.Load($fields)
+            $context.Load($myfield)
+            $context.ExecuteQuery()
+
+            $LocalizedDisplayNames.GetEnumerator() | % {
+                if ($web.Language -eq $_.Key.LCID)
+                {
+                    $myfield.Title = $_.Value
+                }
+                $myfield.TitleResource.SetValueForUICulture($_.Key, $_.Value)
+            }
+            $myfield.UpdateAndPushChanges($true)
+            $context.ExecuteQuery()
+        }
+
         Write-Host   "Campo '$InternalName' creado" -ForegroundColor Green
     }	
 }
@@ -222,10 +273,13 @@ Function New-SiteContentType() {
         [bool]$Hidden = $false,
 
         [Parameter(Mandatory = $false)]
-        [System.Xml.XmlElement]$Fields = $null		
+        [System.Xml.XmlElement]$Fields = $null,
+
+        [Parameter(Mandatory = $true)]
+        [System.Management.Automation.PSCredential]$Credentials	
     )
     Process {
-        $contentType = Get-PnPContentType | Where-Object { $_.Name -eq $Name }
+        $contentType = Get-PnPContentType | Where-Object { $_.Id.StringValue -eq $ContentTypeId }
         if ($contentType.Name -ne $null) {
             Write-Host -ForegroundColor Yellow  "El tipo de contenido '$ContentTypeId' ya existe, se modificará..."            
         }
@@ -233,6 +287,31 @@ Function New-SiteContentType() {
             Add-PnPContentType -Name $Name -ContentTypeId $ContentTypeId -Description $Description -Group $Group 
             Write-Host -ForegroundColor Green  "Tipo de contenido '$ContentTypeId' creado"
         }
+
+        if ($LocalizedNames -ne $null) {
+            $cxt = Get-PnPContext
+            $creden = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($Credentials.UserName, $Credentials.Password)
+            $context = New-Object Microsoft.SharePoint.Client.ClientContext($cxt.Url)
+            $context.Credentials = $creden
+            $web = $context.Web
+            $contentTypes = $context.Web.ContentTypes
+            $myContentType = $contentTypes.GetById($ContentTypeId)
+            $context.Load($web)
+            $context.Load($contentTypes)
+            $context.Load($myContentType)
+            $context.ExecuteQuery()
+
+            $LocalizedNames.GetEnumerator() | % {
+                if ($web.Language -eq $_.Key.LCID)
+                {
+                    $myContentType.Name = $_.Value
+                }
+                $myContentType.NameResource.SetValueForUICulture($_.Key, $_.Value)
+            }
+            $myContentType.Update($true)
+            $context.ExecuteQuery()
+        }
+
         Foreach ($item in $Fields.Add) {			
             if ($item.Required -eq "True") {
                 Add-PnPFieldToContentType -Field $item.InternalName -ContentType $Name -Required
