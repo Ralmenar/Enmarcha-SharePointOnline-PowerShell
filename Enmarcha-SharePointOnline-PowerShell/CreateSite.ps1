@@ -41,7 +41,7 @@ Process
                 $list = & "$currentPath\New-List.ps1" -Path $_.FullName -tenant $Tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials 
             }
 			Get-ChildItem -Path $Path -Filter "PAGE-*" | % {
-				$list = & "$currentPath\New-Page.ps1" -Path $_.FullName -tenant $tenant -UrlWebApplication $UrlWebApplication 
+				$list = & "$currentPath\New-Page.ps1" -Path $_.FullName -tenant $tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials 
 			}
 			$list = & "$currentPath\New-Navigation.ps1" -Path $Path -tenant $tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials
 			Get-ChildItem -Path $Path -Filter "WEB-*" | % {

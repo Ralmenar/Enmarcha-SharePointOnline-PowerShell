@@ -5,12 +5,19 @@ Param
     [Parameter(Mandatory = $true)]
     [string]$tenant,
     [Parameter(Mandatory = $true)]
-    [string]$UrlWebApplication
+    [string]$UrlWebApplication,
+    [Parameter(Mandatory = $true)]
+    [System.Management.Automation.PSCredential]$credentials 
 )
 Process {
+    $ctx = Get-PnPContext
+
     Get-ChildItem -Path $Path  | % {
         $strFileName = $_.FullName
         [xml]$manifest = Get-Content "$strFileName"
+
+        $url = ($tenant+$UrlWebApplication+$manifest.Page.WebRelativeUrl)
+        Connect-PnPOnline -Url $url -Credentials $credentials 
 
         if ($manifest.Page.RemoveAtFirst -ne $null -and $manifest.Page.RemoveAtFirst.ToLower() -eq "true") {
             Remove-PnPClientSidePage $manifest.Page.Name -Force
@@ -33,4 +40,6 @@ Process {
             }		
         }
     }
+
+    Set-PnPContext -Context $ctx # switch back to site A
 }
