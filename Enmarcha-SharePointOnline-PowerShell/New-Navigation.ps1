@@ -10,7 +10,6 @@ Param
     [System.Management.Automation.PSCredential]$credentials 
 )
 Process {
-
     function Update-WebNavigationConfig {
         param (
             [Parameter(Mandatory = $true)]
@@ -19,11 +18,6 @@ Process {
             [System.Management.Automation.PSCredential]$Credentials
         )
 
-        try {
-            Add-Type -Path "C:\Program Files\Common Files\microsoft shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.Publishing.dll"
-        }
-        catch {}
-
         $cred = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($Credentials.UserName, $Credentials.Password) 
         $context = New-Object Microsoft.SharePoint.Client.ClientContext($WebUrl)
         $context.Credentials = $cred
@@ -31,7 +25,6 @@ Process {
         $web = $context.Web
         $context.Load($web)
         $context.ExecuteQuery() 
-        $taxonomySession = [Microsoft.SharePoint.Client.Taxonomy.TaxonomySession]::GetTaxonomySession($context)
         $navigationSettings = New-Object Microsoft.SharePoint.Client.Publishing.Navigation.WebNavigationSettings($context, $web)
         $context.Load($navigationSettings)
         $context.Load($navigationSettings.GlobalNavigation)
@@ -39,7 +32,7 @@ Process {
         $context.ExecuteQuery()
         $navigationSettings.GlobalNavigation.Source = "PortalProvider"
         $navigationSettings.CurrentNavigation.Source = "PortalProvider"
-        $navigationSettings.Update($taxonomySession)
+        $navigationSettings.Update($null)
         $context.ExecuteQuery()
     }
 	  
