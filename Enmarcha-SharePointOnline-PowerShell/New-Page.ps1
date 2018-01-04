@@ -24,11 +24,12 @@ Process {
             Write-Host -ForegroundColor Green "Pagina '"$manifest.Page.Name"' borrada correctamente"
         }
 
-        $commentsEnabled = $false
         if ($manifest.Page.CommentsEnabled -ne $null -and $manifest.Page.CommentsEnabled.ToLower() -eq "true") {
-            $commentsEnabled = $true
+            Add-PnPClientSidePage -Name $manifest.Page.Name -CommentsEnabled
         }
-        Add-PnPClientSidePage -Name $manifest.Page.Name -CommentsEnabled $commentsEnabled
+        else {
+            Add-PnPClientSidePage -Name $manifest.Page.Name
+        }
         Write-Host -ForegroundColor Green "Pagina '"$manifest.Page.Name"' creada correctamente"
         
         $page = Get-PnPClientSidePage $manifest.Page.Name
