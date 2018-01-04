@@ -3,10 +3,7 @@
   <ContentTypes>
     <Add
        Id="0x0100B70886F11C0CDB418FB8A93F1C4842DD"
-       Parent="Item"
-       DisplayName="Test Content Type"
        Name="Test Content Type"
-       StaticName="Test Content Type"
        Group="Enmarcha"
        Description="Test Content Type">
       <DisplayNames>

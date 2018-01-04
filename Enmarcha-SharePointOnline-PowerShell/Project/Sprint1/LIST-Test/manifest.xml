@@ -5,6 +5,17 @@
   <Description>Test List</Description>
   <QuickLaunchOption>On</QuickLaunchOption>
   <ContentTypes>
-    <ContentType LCID="1033" Name="Test Content Type" />
+    <Add Name="Test Content Type" />
+    <Remove Name="Item" />
   </ContentTypes>
+  <Versioning EnableVersioning="True" DraftVersionVisibility="Author" EnableModeration="True" MajorVersions="50"/>
+  <Views>
+    <View Name="My View" Default="True" Fields="Title,Modified,Editor">
+      <Query>
+        <GroupBy Collapse="False">
+          <FieldRef Name="ENMARCHACategory" />
+        </GroupBy>
+      </Query>
+    </View>
+  </Views>
 </List>
