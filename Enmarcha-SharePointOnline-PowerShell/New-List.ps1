@@ -67,9 +67,24 @@ Process {
                         $ctList.Name = $ctWeb.Name
                         $ctList.Update($false)
                     }
-                }
 
-                $context.ExecuteQuery()
+                    $listFields = $list.Fields
+                    $ctFields = $ctWeb.Fields
+                    $context.Load($listFields)
+                    $context.Load($ctFields)
+                    $context.ExecuteQuery()
+
+                    $ctFields | % {
+                        $internalName = $_.InternalName
+                        $fieldList = $listFields | where {$_.InternalName -eq $internalName}
+                        if ($fieldList.Title -ne $_.Title) {
+                            $fieldList.Title = $_.Title
+                            $fieldList.Update()
+                        }
+                    }
+
+                    $context.ExecuteQuery()
+                }
             }
             if ($manifest.List.ContentTypes.Remove -ne $null) {
                 $manifest.List.ContentTypes.Remove | % {
