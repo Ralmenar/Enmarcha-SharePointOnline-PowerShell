@@ -31,16 +31,51 @@ Process {
             $list = New-PnPList -Title $manifest.List.Name -Template GenericList   -EnableContentTypes  -OnQuickLaunch 
         }
         if ($manifest.List.ContentTypes -ne $null) {
-            $manifest.List.ContentTypes.ContentType | % {
-                Write-Host -ForegroundColor Green "Agregando el Content Type "$_.Name" a la lista $Path"
-                if ($_.DefaultContentType -ne $null -and $_.DefaultContentType.ToLower() -eq "true") {
-                    Add-PnPContentTypeToList -List $manifest.List.Name -ContentType $_.Name -DefaultContentType
+            if ($manifest.List.ContentTypes.Add -ne $null) {
+                $manifest.List.ContentTypes.Add | % {
+                    Write-Host -ForegroundColor Green "Agregando el Content Type "$_.Name" a la lista $Path"
+                    if ($_.DefaultContentType -ne $null -and $_.DefaultContentType.ToLower() -eq "true") {
+                        Add-PnPContentTypeToList -List $manifest.List.Name -ContentType $_.Name -DefaultContentType
+                    }
+                    else {
+                        Add-PnPContentTypeToList -List $manifest.List.Name -ContentType $_.Name
+                    }
                 }
-                else {
-                    Add-PnPContentTypeToList -List $manifest.List.Name -ContentType $_.Name
+
+                $context = New-Object Microsoft.SharePoint.Client.ClientContext($urlsite)
+                $cred = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($credentials.UserName, $credentials.Password)
+                $context.Credentials = $cred
+                $web = $context.Web
+                $availableCTs = $web.AvailableContentTypes
+                $lists = $web.Lists
+                $list = $lists.GetByTitle($manifest.List.Name)
+                $listCTs = $list.ContentTypes
+                $context.Load($web)
+                $context.Load($availableCTs)
+                $context.Load($lists)
+                $context.Load($list)
+                $context.Load($listCTs)
+                $context.ExecuteQuery()
+
+                # Fix names in variations webs
+                $manifest.List.ContentTypes.Add | % {
+                    $ctName = $_.Name
+                    $ctWeb = $availableCTs | where {$_.Name -eq $ctName}
+                    $ctId = ($ctWeb.Id.StringValue + "*")
+                    $ctList = $listCTs | where {$_.Id.StringValue -clike $ctId}
+                    if ($ctWeb.Name -ne $ctList.Name) {
+                        $ctList.Name = $ctWeb.Name
+                        $ctList.Update($false)
+                    }
+                }
+
+                $context.ExecuteQuery()
+            }
+            if ($manifest.List.ContentTypes.Remove -ne $null) {
+                $manifest.List.ContentTypes.Remove | % {
+                    Remove-PnPContentTypeFromList -List $manifest.List.Name -ContentType $_.Name
                 }
             }
-            Remove-PnPContentTypeFromList -List $manifest.List.Name -ContentType "Item"	
         }
         
         if ($manifest.List.DocumentSets -ne $null) {
@@ -69,9 +104,10 @@ Process {
             }
             if ($manifest.List.Versioning.MajorVersions -ne $null) {
                 Set-PnPList -Identity $manifest.List.Name -EnableVersioning $enableVersioning -MajorVersions $manifest.List.Versioning.MajorVersions
-            } else {
-				Set-PnPList -Identity $manifest.List.Name -EnableVersioning $enableVersioning
-			}
+            }
+            else {
+                Set-PnPList -Identity $manifest.List.Name -EnableVersioning $enableVersioning
+            }
 			
             $ctx2 = New-Object Microsoft.SharePoint.Client.ClientContext($urlsite)
             $ctx2.Credentials = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($credentials.UserName, $credentials.Password)
