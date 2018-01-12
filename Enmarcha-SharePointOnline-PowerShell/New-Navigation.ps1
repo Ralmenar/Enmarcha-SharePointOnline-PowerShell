@@ -52,11 +52,15 @@ Process {
             if ($manifest.Site.Navigation.Add -ne $null) {
                 $manifest.Site.Navigation.Add | % {
                     Remove-PnPNavigationNode -Title $_.Title -Location $_.Location -Force
+                    $completeUrl = $_.Url
+                    if (-not $completeUrl.ToLower().StartsWith("http")) {
+                        $completeUrl = $UrlWebApplication + $_.Url
+                    }
                     if ($_.IsExternal -ne $null -and $_.IsExternal.ToLower() -eq "true") {
-                        Add-PnPNavigationNode -Location $_.Location -Title $_.Title -External -Url ($UrlWebApplication + $_.Url)
+                        Add-PnPNavigationNode -Location $_.Location -Title $_.Title -External -Url $completeUrl
                     }
                     else {
-                        Add-PnPNavigationNode -Location $_.Location -Title $_.Title -Url ($UrlWebApplication + $_.Url)
+                        Add-PnPNavigationNode -Location $_.Location -Title $_.Title -Url $completeUrl
                     }
                 }
             }
