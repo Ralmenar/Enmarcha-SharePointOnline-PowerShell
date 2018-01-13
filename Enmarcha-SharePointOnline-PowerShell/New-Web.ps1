@@ -54,7 +54,6 @@ Process {
 		
         Set-PnPHomePage -RootFolderRelativeUrl $manifest.Site.WelcomePage.Url
         Write-Host -ForegroundColor Green "Ok"	
-        Set-PnPContext -Context $ctx # switch back to site A
     }	
     
     if ($manifest.Site.Theme.Url -ne $null) {
@@ -66,9 +65,11 @@ Process {
     }	
     
     if ($manifest.Site.IconUrl -ne $null) {			
-        $urlIcon = $UrlWebApplication + $manifest.Site.IconUrl
+        $urlIcon = ($UrlWebApplication+"/"+$manifest.Site.IconUrl.Trim())
         Write-Host  "Estableciendo el icono del sitio " $urlIcon
-        Set-PnPSiteLogo -RootFolderRelativeUrl $manifest.Site.IconUrl.Trim()
+        Set-PnPWeb -SiteLogoUrl $urlIcon
         Write-Host -ForegroundColor Green "Ok"
     }
+    
+    Set-PnPContext -Context $ctx # switch back to site A
 }

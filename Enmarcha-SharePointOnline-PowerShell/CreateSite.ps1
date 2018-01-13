@@ -60,19 +60,22 @@ Process {
         Process {
 						
 
-            Write-Host -ForegroundColor Cyan "comenzando a procesar la carpeta $Path"					
+            Write-Host -ForegroundColor Cyan "comenzando a procesar la carpeta $Path"
+            Get-ChildItem -Path $Path -Filter "FILE-*" | % {
+                $list = & "$currentPath\New-File.ps1" -Path $_.FullName 
+            }					
             Get-ChildItem -Path $Path -Filter "LIST-*" | % {
                 $list = & "$currentPath\New-List.ps1" -Path $_.FullName -tenant $Tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials
             }
-            Get-ChildItem -Path $Path -Filter "DOCLIB-*" | % {
+			Get-ChildItem -Path $Path -Filter "DOCLIB-*" | % {
                 $list = & "$currentPath\New-DocLib.ps1" -Path $_.FullName -tenant $Tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials
             }
-            Get-ChildItem -Path $Path -Filter "LIB-*" | % {
+			Get-ChildItem -Path $Path -Filter "LIB-*" | % {
                 $list = & "$currentPath\New-List.ps1" -Path $_.FullName -tenant $Tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials 
             }
-            Get-ChildItem -Path $Path -Filter "PAGE-*" | % {
-                $list = & "$currentPath\New-Page.ps1" -Path $_.FullName -tenant $tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials 
-            }
+			Get-ChildItem -Path $Path -Filter "PAGE-*" | % {
+				$list = & "$currentPath\New-Page.ps1" -Path $_.FullName -tenant $tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials 
+			}
             $list = & "$currentPath\New-Navigation.ps1" -Path $Path -tenant $tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials
             Get-ChildItem -Path $Path -Filter "WEB-*" | % {
                 $list = & "$currentPath\New-Web.ps1" -Path $_.FullName -tenant $Tenant -UrlWebApplication $UrlWebApplication -Credentials $credentials 
@@ -111,24 +114,24 @@ Process {
     Connect-PnPOnline -Url $createWeb -Credentials $credential
     $ctx = Get-PnPContext
     
-    #Creo los grupos 
-    Get-ChildItem -Path $PathConfiguration -Filter "GROUP" | % {
-        $list = & "$currentPath\New-Group.ps1" -Path $_.FullName
-    }
-    ##Creo la taxonomia
-    Get-ChildItem -Path $PathConfiguration -Filter "TAXONOMY" | % {
-        $list = & "$currentPath\New-Taxonomy.ps1" -Path $_.FullName
-    }
-    ###Creo las Columnas de Sitio
-    Get-ChildItem -Path $PathConfiguration -Filter "SiteColumns*"   | % {
-        Write-Host "Procesando el XML del fichero" + $_.FullName
-        Import-ContentTypesXmlFiles -Path $_.FullName -ContentTypeMinVersion $ContentTypeMinVersion -ContentTypeMaxVersion $ContentTypeMaxVersion -Credentials $credential
-    }
-    #Creo los Tipos de Contenidos
-    Get-ChildItem -Path $PathConfiguration -Filter "*ContentType*"   | % {
-        Write-Host "Procesando el XML del fichero" + $_.FullName
-        Import-ContentTypesXmlFiles -Path $_.FullName -ContentTypeMinVersion $ContentTypeMinVersion -ContentTypeMaxVersion $ContentTypeMaxVersion -Credentials $credential
-    }
+	#Creo los grupos 
+		Get-ChildItem -Path $PathConfiguration -Filter "GROUP" | % {
+				$list = & "$currentPath\New-Group.ps1" -Path $_.FullName
+			}
+	##Creo la taxonomia
+	Get-ChildItem -Path $PathConfiguration -Filter "TAXONOMY" | % {
+				$list = & "$currentPath\New-Taxonomy.ps1" -Path $_.FullName
+			}
+	###Creo las Columnas de Sitio
+	Get-ChildItem -Path $PathConfiguration -Filter "SiteColumns*"   | % {
+		Write-Host "Procesando el XML del fichero" + $_.FullName
+		Import-ContentTypesXmlFiles -Path $_.FullName -ContentTypeMinVersion $ContentTypeMinVersion -ContentTypeMaxVersion $ContentTypeMaxVersion -Credentials $credential
+	}
+	#Creo los Tipos de Contenidos
+	Get-ChildItem -Path $PathConfiguration -Filter "*ContentType*"   | % {
+		Write-Host "Procesando el XML del fichero" + $_.FullName
+		Import-ContentTypesXmlFiles -Path $_.FullName -ContentTypeMinVersion $ContentTypeMinVersion -ContentTypeMaxVersion $ContentTypeMaxVersion -Credentials $credential
+	}
 
     Write-Host "Iniciando la carpeta $PathConfiguration" -ForegroundColor Green			
     Process-Folder -Path "$PathConfiguration" -UrlWebApplication $UrlWebApplication -tenant $Tenant	-credentials $credential
