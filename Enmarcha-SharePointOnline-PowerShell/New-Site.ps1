@@ -31,9 +31,6 @@ Process {
     else {
         Write-Host -ForegroundColor Yellow "La colección de sitios $url ya Existe!!"
     }
-    Get-ChildItem -Path $Path -Filter "FILE" | % {
-        $list = & "$currentPath\New-File.ps1" -Path $_.FullName 
-    }
 
     if ($manifest.Site.SiteFeatures -ne $null) {
         if ($manifest.Site.SiteFeatures.Add -ne $null) {

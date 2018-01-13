@@ -6,6 +6,7 @@
     <TimeZoneId>3</TimeZoneId>
     <Language>1033</Language>
     <WelcomePage Url="SitePages/Home.aspx" />
+    <IconUrl>PublishingImages/Logo.png</IconUrl>
     <Navigation>
         <Add Title="News" Url="/_layouts/News.aspx" Location="QuickLaunch" IsExternal="False" />
         <Remove Title="Notebook" Location="QuickLaunch" />
