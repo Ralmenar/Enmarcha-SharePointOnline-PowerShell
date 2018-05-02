@@ -1,6 +1,3 @@
-#
-# New_Group.ps1
-#
 Param
 (
 	[Parameter(Mandatory=$true)]
@@ -20,8 +17,13 @@ Process
 	}
 	else
 	{
-		Write-Host -ForegroundColor Yellow "El grupo " $_.Name " ya Existe!!"
+		Write-Host -ForegroundColor Yellow "El grupo " $_.Name " ya Existe!"
 	}
+
+	if ($_.Permissions) {
+		Set-PnPGroupPermissions -Identity $group -AddRole $_.Permissions
+	}
+
 	##A�adimos a los usuarios al grupo 
 	#if($_.Users -ne $null)
  #   {
