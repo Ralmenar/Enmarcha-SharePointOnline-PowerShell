@@ -95,5 +95,42 @@
         <DisplayName Label="en-US" Value="Options" />
       </DisplayNames>
     </Add>
+    <Add
+      Id="6bbe12ab-7551-4ef5-8c35-5ad0689cefb9"
+      FieldType="User"
+      Name="ENMARCHAUser"
+      DisplayName="User"
+      StaticName="ENMARCHAUser"
+      Group="Enmarcha"
+      Hidden="False"
+      Required="False"
+      Sealed="False"
+      ShowInDisplayForm="True"
+      ShowInEditForm="True"
+      ShowInListSettings="True"
+      ShowInNewForm="True">
+      <DisplayNames>
+        <DisplayName Label="en-US" Value="User" />
+      </DisplayNames>
+    </Add>
+    <Add
+      Id="e4825956-3098-4bf1-89a5-6d99a8d1228f"
+      FieldType="User"
+      Name="ENMARCHAUserMulti"
+      DisplayName="UserMulti"
+      StaticName="ENMARCHAUserMulti"
+      Group="Enmarcha"
+      Hidden="False"
+      Required="False"
+      Sealed="False"
+      ShowInDisplayForm="True"
+      ShowInEditForm="True"
+      ShowInListSettings="True"
+      ShowInNewForm="True">
+      <User AllowMultipleValues="True" UserSelectionMode="PeopleOnly" />
+      <DisplayNames>
+        <DisplayName Label="en-US" Value="UserMulti" />
+      </DisplayNames>
+    </Add>
   </SiteColumns>
 </Site>

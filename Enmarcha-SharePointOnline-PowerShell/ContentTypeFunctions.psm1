@@ -2,7 +2,7 @@ Function New-SiteColumn() {
     Param
     (
         [Parameter(Mandatory = $true)]
-        [ValidateSet("Boolean", "Number", "Text", "LookupMulti", "DateTime", "URL", "Image", "Link", "Note", "HTML", "Calculated", "User", "UserMulti", "Choice", "MultiChoice", "TaxonomyFieldType", "TaxonomyFieldTypeMulti", "SummaryLinks", "MediaFieldType", "Currency")]
+        [ValidateSet("Boolean", "Number", "Text", "LookupMulti", "DateTime", "URL", "Image", "Link", "Note", "HTML", "Calculated", "User", "Choice", "MultiChoice", "TaxonomyFieldType", "TaxonomyFieldTypeMulti", "SummaryLinks", "MediaFieldType", "Currency")]
         [string]$FieldType,
 
         [Parameter(Mandatory = $true)]
@@ -207,6 +207,22 @@ Function New-SiteColumn() {
                         Add-PnPField -DisplayName $DisplayName -InternalName $InternalName -Type $FieldType -Group $Group 
                     }
                 }
+            }
+        }
+
+        if ($FieldType -eq "User") {
+            if ($UserAllowMultipleValues -eq $true) {
+                $userField = Get-PnPField -Identity $InternalName
+                $userField.AllowMultipleValues = $true
+                $userField.Update()
+                $userField = Get-PnPField -Identity $InternalName
+            }
+
+            if ($UserSelectionMode -eq "PeopleOnly") {
+                $userField = Get-PnPField -Identity $InternalName
+                $userField.SelectionMode = "PeopleOnly"
+                $userField.Update()
+                $userField = Get-PnPField -Identity $InternalName
             }
         }
 
