@@ -2,7 +2,7 @@ Function New-SiteColumn() {
     Param
     (
         [Parameter(Mandatory = $true)]
-        [ValidateSet("Boolean", "Number", "Text", "LookupMulti", "DateTime", "URL", "Image", "Link", "Note", "HTML", "Calculated", "User", "UserMulti", "Choice", "MultiChoice", "TaxonomyFieldType", "TaxonomyFieldTypeMulti", "SummaryLinks", "MediaFieldType", "Currency")]
+        [ValidateSet("Boolean", "Number", "Text", "LookupMulti", "DateTime", "URL", "Image", "Link", "Note", "HTML", "Calculated", "User", "Choice", "MultiChoice", "TaxonomyFieldType", "TaxonomyFieldTypeMulti", "SummaryLinks", "MediaFieldType", "Currency")]
         [string]$FieldType,
 
         [Parameter(Mandatory = $true)]
@@ -169,29 +169,32 @@ Function New-SiteColumn() {
             $termSetPath = $TermStoreGroupName + "|" + $TermSetName
             Write-Host -ForegroundColor Yellow "El TermsetPath es $termSetPath"
             if ($Required) {
-                Write-Host -ForegroundColor Yellow "El Campo es Requerido"
-                Add-PnPTaxonomyField -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath -Required
+                if ($AllowMultipleValues) {
+                    Add-PnPTaxonomyField -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath -Required -MultiValue
+                } else {
+                    Add-PnPTaxonomyField -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath -Required
+                }
             }
             else {
-                Write-Host -ForegroundColor Yellow "El Campo NO es Requerido"
-                Add-PnPTaxonomyField -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath
+                if ($AllowMultipleValues) {
+                    Add-PnPTaxonomyField -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath -MultiValue
+                } else {
+                    Add-PnPTaxonomyField -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath
+                }
             }
         }
         else {
             if ($FieldType -eq "Choice" -or $FieldType -eq "MultiChoice") {
                 if ($Required) {
-                    Write-Host -ForegroundColor Yellow "El Campo  es Requerido"
                     Add-PnPField -DisplayName $DisplayName -InternalName $InternalName -Type $FieldType -Group $Group  -choice $Choices -Required
                 }
                 else {
-                    Write-Host -ForegroundColor Yellow "El Campo NO es Requerido"
                     Add-PnPField -DisplayName $DisplayName -InternalName $InternalName -Type $FieldType -Group $Group  -choice $Choices 
                 }
             }
 
             else {
                 if ($FieldType -eq "DateTime") {
-                    Write-Host "Creo el campo Fecha"
                     $schema = "<Field ID='" + $Id + "' Type='DateTime' Name='" + $InternalName + "' StaticName='" + $InternalName + "' 
 					DisplayName='" + $DisplayName + "' Format='DateOnly' ><Default>[Today]</Default></Field>"
                     Write-Host $schema
@@ -199,14 +202,28 @@ Function New-SiteColumn() {
                 }
                 else {
                     if ($Required) {
-                        Write-Host -ForegroundColor Yellow "El Campo  es Requerido"
                         Add-PnPField -DisplayName $DisplayName -InternalName $InternalName -Type $FieldType -Group $Group -Required
                     }
                     else {
-                        Write-Host -ForegroundColor Yellow "El Campo NO es Requerido"
                         Add-PnPField -DisplayName $DisplayName -InternalName $InternalName -Type $FieldType -Group $Group 
                     }
                 }
+            }
+        }
+
+        if ($FieldType -eq "User") {
+            if ($UserAllowMultipleValues -eq $true) {
+                $userField = Get-PnPField -Identity $InternalName
+                $userField.AllowMultipleValues = $true
+                $userField.Update()
+                $userField = Get-PnPField -Identity $InternalName
+            }
+
+            if ($UserSelectionMode -eq "PeopleOnly") {
+                $userField = Get-PnPField -Identity $InternalName
+                $userField.SelectionMode = "PeopleOnly"
+                $userField.Update()
+                $userField = Get-PnPField -Identity $InternalName
             }
         }
 
