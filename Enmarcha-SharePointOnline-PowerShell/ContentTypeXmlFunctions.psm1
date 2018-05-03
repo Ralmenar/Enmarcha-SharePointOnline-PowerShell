@@ -87,7 +87,7 @@ Function New-SiteColumnFromXml() {
             -ImageRichText $Xml.Image.RichText -ImageRichTextMode $Xml.Image.RichTextMode `
             -LinkRichText $Xml.Link.RichText -LinkRichTextMode $Xml.Link.RichTextMode `
             -NoteRichText $Xml.Note.RichText -NoteRichTextMode $Xml.Note.RichTextMode `
-            -UnlimitedLengthInDocumentLibrary (Get-BoolValueOrNull $Xml.Note.UnlimitedLengthInDocumentLibrary) `
+            -UnlimitedLengthInDocumentLibrary $Xml.Note.UnlimitedLengthInDocumentLibrary `
             -HtmlRichText $Xml.Html.RichText -HtmlRichTextMode $Xml.Html.RichTextMode `
             -CalculatedFormulaValueType $Xml.Calculated.FormulaValueType -CalculatedFormula $Xml.Calculated.Formula `
             -UserSelectionMode $xml.User.UserSelectionMode -UserAllowMultipleValues (Get-BoolValueOrNull $Xml.User.AllowMultipleValues) `
@@ -133,7 +133,7 @@ Function New-SiteColumnFromXml() {
             -ImageRichText $Xml.Image.RichText -ImageRichTextMode $Xml.Image.RichTextMode `
             -LinkRichText $Xml.Link.RichText -LinkRichTextMode $Xml.Link.RichTextMode `
             -NoteRichText $Xml.Note.RichText -NoteRichTextMode $Xml.Note.RichTextMode `
-            -UnlimitedLengthInDocumentLibrary (Get-BoolValueOrNull $Xml.Note.UnlimitedLengthInDocumentLibrary) `
+            -UnlimitedLengthInDocumentLibrary $Xml.Note.UnlimitedLengthInDocumentLibrary `
             -HtmlRichText $Xml.Html.RichText -HtmlRichTextMode $Xml.Html.RichTextMode `
             -CalculatedFormulaValueType $Xml.Calculated.FormulaValueType -CalculatedFormula $Xml.Calculated.Formula `
             -UserSelectionMode $xml.User.UserSelectionMode -UserAllowMultipleValues (Get-BoolValueOrNull $Xml.User.AllowMultipleValues) `

@@ -80,7 +80,7 @@ Function New-SiteColumn() {
         [string]$NoteRichTextMode = "",
 
         [Parameter(Mandatory = $false)]
-        [Nullable[bool]]$UnlimitedLengthInDocumentLibrary = $null,
+        [string]$UnlimitedLengthInDocumentLibrary = "",
 
         [Parameter(Mandatory = $false)]
         [ValidateSet("", "TRUE", "FALSE")]
@@ -195,17 +195,25 @@ Function New-SiteColumn() {
 
             else {
                 if ($FieldType -eq "DateTime") {
-                    $schema = "<Field ID='" + $Id + "' Type='DateTime' Name='" + $InternalName + "' StaticName='" + $InternalName + "' 
+                    $schema = "<Field ID='" + $Id + "' Type='DateTime' Name='" + $InternalName + "' StaticName='" + $InternalName + "' Group='" + $Group + "'
 					DisplayName='" + $DisplayName + "' Format='DateOnly' ><Default>[Today]</Default></Field>"
                     Write-Host $schema
                     Add-PnPFieldFromXml -FieldXml $schema
                 }
                 else {
-                    if ($Required) {
-                        Add-PnPField -DisplayName $DisplayName -InternalName $InternalName -Type $FieldType -Group $Group -Required
+                    if ($FieldType -eq "Note") {
+                        $schema = "<Field ID='" + $Id + "' Type='Note' Name='" + $InternalName + "' StaticName='" + $InternalName + "' DisplayName='" + $DisplayName + "' Group='" + $Group +
+                        "' NumLines='6'  RichText='" + $NoteRichText + "' RichTextMode='" + $NoteRichTextMode + "' UnlimitedLengthInDocumentLibrary='" + $UnlimitedLengthInDocumentLibrary + "' />"
+                        Write-Host $schema
+                        Add-PnPFieldFromXml -FieldXml $schema
                     }
                     else {
-                        Add-PnPField -DisplayName $DisplayName -InternalName $InternalName -Type $FieldType -Group $Group 
+                        if ($Required) {
+                            Add-PnPField -DisplayName $DisplayName -InternalName $InternalName -Type $FieldType -Group $Group -Required
+                        }
+                        else {
+                            Add-PnPField -DisplayName $DisplayName -InternalName $InternalName -Type $FieldType -Group $Group 
+                        }
                     }
                 }
             }

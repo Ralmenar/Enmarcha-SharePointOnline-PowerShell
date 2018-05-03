@@ -132,5 +132,24 @@
         <DisplayName Label="en-US" Value="UserMulti" />
       </DisplayNames>
     </Add>
+    <Add
+      Id="fbaddba7-147f-4b13-b9b6-e84f14c7faa0"
+      FieldType="Note"
+      Name="ENMARCHANoteRich"
+      DisplayName="Note Rich"
+      StaticName="ENMARCHANoteRich"
+      Group="Enmarcha"
+      Hidden="False"
+      Required="False"
+      Sealed="False"
+      ShowInDisplayForm="True"
+      ShowInEditForm="True"
+      ShowInListSettings="True"
+      ShowInNewForm="True">
+      <Note UnlimitedLengthInDocumentLibrary="TRUE" RichText="TRUE" RichTextMode="FullHtml" />
+      <DisplayNames>
+        <DisplayName Label="en-US" Value="Note Rich" />
+      </DisplayNames>
+    </Add>
   </SiteColumns>
 </Site>
