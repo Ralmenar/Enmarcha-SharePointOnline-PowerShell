@@ -14,6 +14,7 @@ Process
 	{		
 		New-PnPGroup -Title $_.Name
 		Write-Host -ForegroundColor Green "Grupo " $_.Name " Creado"
+		$group = Get-PnPGroup -Identity $_.Name -ErrorAction SilentlyContinue
 	}
 	else
 	{
