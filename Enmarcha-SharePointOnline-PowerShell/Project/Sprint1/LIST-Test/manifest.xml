@@ -9,6 +9,7 @@
     <Remove Name="Item" />
   </ContentTypes>
   <Versioning EnableVersioning="True" DraftVersionVisibility="Author" EnableModeration="True" MajorVersions="50"/>
+  <ItemLevelPermissions ReadSecurity="ReadCreatedByUser" WriteSecurity="EditCreatedByUser" />
   <Views>
     <View Name="My View" Default="True" Fields="Title,Modified,Editor">
       <Query>
