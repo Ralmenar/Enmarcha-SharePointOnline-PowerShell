@@ -63,8 +63,6 @@ Function New-SiteColumnFromXml() {
         [System.Management.Automation.PSCredential]$Credentials
     )
     Process {
-        Write-Host "Iniciando función New-SiteColumnFromXml en el sitio Xml: $($Xml.OuterXml)"
-
         [System.Collections.Generic.Dictionary[System.Globalization.CultureInfo, string]]$displayNames = Get-LocalizedDisplayNamesDictionary -Xml $Xml.DisplayNames
 
         if ($displayNames -eq $null) {
@@ -111,7 +109,6 @@ Function New-SiteColumnFromXml() {
         [string]$Web
     )
     Process {
-        Write-Host  "Iniciando función Update-SiteColumnFromXml en el sitio: $($Web.Url) Xml: $($Xml.OuterXml)"
         [System.Collections.Generic.Dictionary[System.Globalization.CultureInfo, string]]$displayNames = Get-LocalizedDisplayNamesDictionary -Xml $Xml.DisplayNames
         if ($displayNames -eq $null) {
             $displayName = $Xml.Name
@@ -185,8 +182,6 @@ Function New-SiteContentTypeFromXml() {
         [System.Management.Automation.PSCredential]$Credentials
     )
     Process {
-        Write-Host "Iniciando función New-SiteContentTypeFromXml en el sitio: Xml: $($Xml.OuterXml)"
-
         [System.Collections.Generic.Dictionary[System.Globalization.CultureInfo, string]]$names = Get-LocalizedDisplayNamesDictionary -Xml $Xml.DisplayNames
         [System.Collections.Generic.Dictionary[System.Globalization.CultureInfo, string]]$descriptions = Get-LocalizedDescriptionResourcesDictionary -Xml $Xml.DescriptionResources
 
