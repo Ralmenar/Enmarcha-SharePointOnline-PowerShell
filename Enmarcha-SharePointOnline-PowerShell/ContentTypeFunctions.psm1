@@ -164,7 +164,7 @@ Function New-SiteColumn() {
             return
         }
 		
-        $fieldXml = "<Field Type='$FieldType' ID='$Id' Name='$InternalName' DisplayName='$DisplayName' Description='$Description'></Field>"		
+        $fieldXml = "<Field Type='$FieldType' ID='$Id' Name='$InternalName' DisplayName='$DisplayName' Description='$Description' Required='$Required'></Field>"		
         if ($FieldType -eq "TaxonomyFieldType") {
             $termSetPath = $TermStoreGroupName + "|" + $TermSetName
             Write-Host -ForegroundColor Yellow "El TermsetPath es $termSetPath"
@@ -194,14 +194,19 @@ Function New-SiteColumn() {
             }
 
             else {
+                $requiredText = "FALSE"
+                if ($Required) {
+                    $requiredText = "TRUE"
+                }
+
                 if ($FieldType -eq "DateTime") {
                     $schema = "<Field ID='" + $Id + "' Type='DateTime' Name='" + $InternalName + "' StaticName='" + $InternalName + "' Group='" + $Group + "'
-					DisplayName='" + $DisplayName + "' Format='DateOnly' ><Default>[Today]</Default></Field>"
+					DisplayName='" + $DisplayName + "' Required='" + $requiredText + "' Format='DateOnly' ><Default>[Today]</Default></Field>"
                     Add-PnPFieldFromXml -FieldXml $schema
                 }
                 else {
                     if ($FieldType -eq "Note") {
-                        $schema = "<Field ID='" + $Id + "' Type='Note' Name='" + $InternalName + "' StaticName='" + $InternalName + "' DisplayName='" + $DisplayName + "' Group='" + $Group +
+                        $schema = "<Field ID='" + $Id + "' Type='Note' Name='" + $InternalName + "' StaticName='" + $InternalName + "' DisplayName='" + $DisplayName + "' Group='" + $Group + "' Required='" + $requiredText +
                         "' NumLines='6'  RichText='" + $NoteRichText + "' RichTextMode='" + $NoteRichTextMode + "' UnlimitedLengthInDocumentLibrary='" + $UnlimitedLengthInDocumentLibrary + "' />"
                         Add-PnPFieldFromXml -FieldXml $schema
                     }
