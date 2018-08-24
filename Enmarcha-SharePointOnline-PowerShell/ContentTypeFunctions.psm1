@@ -201,7 +201,7 @@ Function New-SiteColumn() {
 
                 if ($FieldType -eq "DateTime") {
                     $schema = "<Field ID='" + $Id + "' Type='DateTime' Name='" + $InternalName + "' StaticName='" + $InternalName + "' Group='" + $Group + "'
-					DisplayName='" + $DisplayName + "' Required='" + $requiredText + "' Format='DateOnly' ><Default>[Today]</Default></Field>"
+					DisplayName='" + $DisplayName + "' Required='" + $requiredText + "' Format='DateOnly' ></Field>"
                     Add-PnPFieldFromXml -FieldXml $schema
                 }
                 else {
