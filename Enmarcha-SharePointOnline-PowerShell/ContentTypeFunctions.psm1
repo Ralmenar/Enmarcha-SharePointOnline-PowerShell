@@ -164,55 +164,58 @@ Function New-SiteColumn() {
             return
         }
 		
-        $fieldXml = "<Field Type='$FieldType' ID='$Id' Name='$InternalName' DisplayName='$DisplayName' Description='$Description'></Field>"		
+        $fieldXml = "<Field Type='$FieldType' ID='$Id' Name='$InternalName' DisplayName='$DisplayName' Description='$Description' Required='$Required'></Field>"		
         if ($FieldType -eq "TaxonomyFieldType") {
             $termSetPath = $TermStoreGroupName + "|" + $TermSetName
             Write-Host -ForegroundColor Yellow "El TermsetPath es $termSetPath"
             if ($Required) {
                 if ($AllowMultipleValues) {
-                    Add-PnPTaxonomyField -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath -Required -MultiValue
+                    Add-PnPTaxonomyField -Id $Id -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath -Required -MultiValue
                 } else {
-                    Add-PnPTaxonomyField -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath -Required
+                    Add-PnPTaxonomyField -Id $Id -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath -Required
                 }
             }
             else {
                 if ($AllowMultipleValues) {
-                    Add-PnPTaxonomyField -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath -MultiValue
+                    Add-PnPTaxonomyField -Id $Id -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath -MultiValue
                 } else {
-                    Add-PnPTaxonomyField -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath
+                    Add-PnPTaxonomyField -Id $Id -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath
                 }
             }
         }
         else {
             if ($FieldType -eq "Choice" -or $FieldType -eq "MultiChoice") {
                 if ($Required) {
-                    Add-PnPField -DisplayName $DisplayName -InternalName $InternalName -Type $FieldType -Group $Group  -choice $Choices -Required
+                    Add-PnPField -Id $Id -DisplayName $DisplayName -InternalName $InternalName -Type $FieldType -Group $Group  -choice $Choices -Required
                 }
                 else {
-                    Add-PnPField -DisplayName $DisplayName -InternalName $InternalName -Type $FieldType -Group $Group  -choice $Choices 
+                    Add-PnPField -Id $Id -DisplayName $DisplayName -InternalName $InternalName -Type $FieldType -Group $Group  -choice $Choices 
                 }
             }
 
             else {
+                $requiredText = "FALSE"
+                if ($Required) {
+                    $requiredText = "TRUE"
+                }
+
                 if ($FieldType -eq "DateTime") {
                     $schema = "<Field ID='" + $Id + "' Type='DateTime' Name='" + $InternalName + "' StaticName='" + $InternalName + "' Group='" + $Group + "'
-					DisplayName='" + $DisplayName + "' Format='DateOnly' ><Default>[Today]</Default></Field>"
-                    Write-Host $schema
+					DisplayName='" + $DisplayName + "' Required='" + $requiredText + "' Format='DateOnly' ></Field>"
                     Add-PnPFieldFromXml -FieldXml $schema
                 }
                 else {
                     if ($FieldType -eq "Note") {
-                        $schema = "<Field ID='" + $Id + "' Type='Note' Name='" + $InternalName + "' StaticName='" + $InternalName + "' DisplayName='" + $DisplayName + "' Group='" + $Group +
+                        $schema = "<Field ID='" + $Id + "' Type='Note' Name='" + $InternalName + "' StaticName='" + $InternalName + "' DisplayName='" + $DisplayName + "' Group='" + $Group + "' Required='" + $requiredText +
                         "' NumLines='6'  RichText='" + $NoteRichText + "' RichTextMode='" + $NoteRichTextMode + "' UnlimitedLengthInDocumentLibrary='" + $UnlimitedLengthInDocumentLibrary + "' />"
-                        Write-Host $schema
                         Add-PnPFieldFromXml -FieldXml $schema
                     }
                     else {
                         if ($Required) {
-                            Add-PnPField -DisplayName $DisplayName -InternalName $InternalName -Type $FieldType -Group $Group -Required
+                            Add-PnPField -Id $Id -DisplayName $DisplayName -InternalName $InternalName -Type $FieldType -Group $Group -Required
                         }
                         else {
-                            Add-PnPField -DisplayName $DisplayName -InternalName $InternalName -Type $FieldType -Group $Group 
+                            Add-PnPField -Id $Id -DisplayName $DisplayName -InternalName $InternalName -Type $FieldType -Group $Group 
                         }
                     }
                 }

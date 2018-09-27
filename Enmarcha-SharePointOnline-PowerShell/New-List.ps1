@@ -175,17 +175,40 @@ Process {
                 }
 
                 if ($_.Default -eq "true") {
-                    Write-Host "Add-PnPView -List" $manifest.List.Name "-Title " $_.Name "-Query " $query " -SetAsDefault  -Fields " $resultField "-Paged "
                     Add-PnPView -List $manifest.List.Name -Title $_.Name -Query $query -Fields $resultField  -Paged -SetAsDefault
 						
                 }
                 else {
-                    Write-Host "Add-PnPView -List" $manifest.List.Name "-Title " $_.Name "-Query " $query " -Fields " $resultField "-Paged "
                     Add-PnPView -List $manifest.List.Name -Title $_.Name -Query $query  -Fields $resultField -Paged
                 }
             }
 		
         }
+
+        if ($manifest.List.ItemLevelPermissions -ne $null) {
+            $existingList = Get-PnPList | Where-Object { $_.Title -eq $manifest.List.Name}
+
+            if ($manifest.List.ItemLevelPermissions.ReadSecurity -eq "ReadAllItems") {
+                $existingList.ReadSecurity = 1
+            }
+            if ($manifest.List.ItemLevelPermissions.ReadSecurity -eq "ReadCreatedByUser") {
+                $existingList.ReadSecurity = 2
+            }
+
+            if ($manifest.List.ItemLevelPermissions.WriteSecurity -eq "EditAllItems") {
+                $existingList.WriteSecurity = 1
+            }
+            if ($manifest.List.ItemLevelPermissions.WriteSecurity -eq "EditCreatedByUser") {
+                $existingList.WriteSecurity = 2
+            }
+            if ($manifest.List.ItemLevelPermissions.WriteSecurity -eq "None") {
+                $existingList.WriteSecurity = 4
+            }
+
+            $existingList.Update()
+            $existingList = Get-PnPList | Where-Object { $_.Title -eq $manifest.List.Name} 
+        }
+
         #Write-Host "Insertando en la lista " $manifest.List.Name
         #$result= & "$currentPath\New-Item.ps1" -UrlWebApplication $UrlWebApplication -tenant $tenant  -Path "$Path"  -ListName $manifest.List.Name
         Set-PnPContext -Context $ctx # switch back to site A

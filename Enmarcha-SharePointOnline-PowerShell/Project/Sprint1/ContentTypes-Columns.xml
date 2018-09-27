@@ -151,5 +151,23 @@
         <DisplayName Label="en-US" Value="Note Rich" />
       </DisplayNames>
     </Add>
+    <Add
+        Id="a1d6411c-b171-451b-9529-e57335bbb398"
+        FieldType="DateTime"
+        Name="ENMARCHADateTime"
+        DisplayName="DateTime"
+        StaticName="ENMARCHADateTime"
+        Group="Enmarcha"
+        Hidden="False"
+        Required="True"
+        Sealed="False"
+        ShowInDisplayForm="True"
+        ShowInEditForm="True"
+        ShowInListSettings="True"
+        ShowInNewForm="True">
+        <DisplayNames>
+            <DisplayName Label="en-US" Value="DateTime" />
+        </DisplayNames>
+    </Add>
   </SiteColumns>
 </Site>

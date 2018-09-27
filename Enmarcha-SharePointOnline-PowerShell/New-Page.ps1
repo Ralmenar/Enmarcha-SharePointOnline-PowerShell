@@ -37,7 +37,12 @@ Process {
         if ($page.Controls.Count -eq 0) {
             Write-Host -ForegroundColor Green "Agregando Webparts a la página"
             $manifest.Page.Webparts.Webpart | % {
-                Add-PnPClientSideWebPart -Page $manifest.Page.Name -DefaultWebPartType $_.Name
+                if($_.Custom.ToLower() -eq "true"){
+                    Add-PnPClientSideWebPart -Page $manifest.Page.Name -Component $_.Name
+                    Write-Host -ForegroundColor Green "Agregado WebPart '"$_.Name"' a" $manifest.Page.Name
+                }else{
+                    Add-PnPClientSideWebPart -Page $manifest.Page.Name -DefaultWebPartType $_.Name
+                }
             }		
         }
     }
