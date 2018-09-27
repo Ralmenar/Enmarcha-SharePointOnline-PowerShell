@@ -298,3 +298,5 @@ __pycache__/
 
 # OpenCover UI analysis results
 OpenCover/
+Enmarcha-SharePointOnline-PowerShell/traceoutput.txt
+.vscode/launch.json

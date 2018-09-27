@@ -168,19 +168,27 @@ Function New-SiteColumn() {
         if ($FieldType -eq "TaxonomyFieldType") {
             $termSetPath = $TermStoreGroupName + "|" + $TermSetName
             Write-Host -ForegroundColor Yellow "El TermsetPath es $termSetPath"
+            $taxField = $null
             if ($Required) {
                 if ($AllowMultipleValues) {
-                    Add-PnPTaxonomyField -Id $Id -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath -Required -MultiValue
+                    $taxField = Add-PnPTaxonomyField -Id $Id -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath -Required -MultiValue
                 } else {
-                    Add-PnPTaxonomyField -Id $Id -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath -Required
+                    $taxField = Add-PnPTaxonomyField -Id $Id -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath -Required
                 }
             }
             else {
                 if ($AllowMultipleValues) {
-                    Add-PnPTaxonomyField -Id $Id -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath -MultiValue
+                    $taxField = Add-PnPTaxonomyField -Id $Id -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath -MultiValue
                 } else {
-                    Add-PnPTaxonomyField -Id $Id -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath
+                    $taxField = Add-PnPTaxonomyField -Id $Id -DisplayName $DisplayName -InternalName $InternalName -Group $Group -TermSetPath $termSetPath
                 }
+            }
+
+            if($taxField -and $IsOpen){
+                $taxField.Open = $true
+                $taxField.CreateValuesInEditForm = $true
+                $taxField.Update()
+                $taxField.Context.ExecuteQuery()
             }
         }
         else {
